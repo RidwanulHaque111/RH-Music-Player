@@ -9,7 +9,7 @@ from mutagen.id3 import ID3
 class MusicPlayer:
     def __init__(self, root):
         self.root = root
-        self.root.minsize(400, 500)
+        self.root.minsize(350, 400)
 
         self.listofsongs = []
         self.realnames = []
