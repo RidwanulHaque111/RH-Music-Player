@@ -32,21 +32,29 @@ class MusicPlayer:
 
         self.realnames.reverse()
 
-        nextbutton = Button(root, text='Next Song', command=self.next_song)
+        # Volume control
+        self.volume_scale = Scale(root, from_=0, to=100, orient=HORIZONTAL, label="Volume", command=self.update_volume)
+        self.volume_scale.set(70)  # Set an initial volume level
+        self.volume_scale.pack()
+
+        self.initialize_mixer()
+
+        nextbutton = Button(root, text='Next Song')
         nextbutton.pack()
 
-        previousbutton = Button(root, text='Previous Song', command=self.prev_song)
+        previousbutton = Button(root, text='Previous Song')
         previousbutton.pack()
 
-        pausebutton = Button(root, text='Pause Song', command=self.pause_song)
+        pausebutton = Button(root, text='Pause Song')
         pausebutton.pack()
 
-        unpausebutton = Button(root, text='Unpause Song', command=self.unpause_song)
+        unpausebutton = Button(root, text='Unpause Song')
         unpausebutton.pack()
 
-        stopbutton = Button(root, text='Stop Music', command=self.stop_song)
+        stopbutton = Button(root, text='Stop Music')
         stopbutton.pack()
 
+        # Use event binding for button clicks
         nextbutton.bind("<Button-1>", self.next_song)
         previousbutton.bind("<Button-1>", self.prev_song)
         pausebutton.bind("<Button-1>", self.pause_song)
@@ -82,16 +90,19 @@ class MusicPlayer:
         self.v.set(self.realnames[self.index])
 
     def next_song(self, event=None):
-        self.index += 1
-        pygame.mixer.music.load(self.listofsongs[self.index])
-        pygame.mixer.music.play()
-        self.update_label()
+        if self.index < len(self.listofsongs) - 1:
+            self.index += 1
+            pygame.mixer.music.load(self.listofsongs[self.index])
+            pygame.mixer.music.play()
+            self.update_label()
 
     def prev_song(self, event=None):
-        self.index -= 1
-        pygame.mixer.music.load(self.listofsongs[self.index])
-        pygame.mixer.music.play()
-        self.update_label()
+        if self.index > 0:
+            self.index -= 1
+            pygame.mixer.music.load(self.listofsongs[self.index])
+            pygame.mixer.music.play()
+            self.update_label()
+
 
     def pause_song(self, event=None):
         pygame.mixer.music.pause()
@@ -104,6 +115,20 @@ class MusicPlayer:
     def stop_song(self, event=None):
         pygame.mixer.music.stop()
         self.v.set("")
+
+    def initialize_mixer(self):
+        pygame.mixer.init()
+
+    def update_volume(self, event=None):
+        volume = self.volume_scale.get() / 100.0  # Scale to a value between 0.0 and 1.0
+        pygame.mixer.music.set_volume(volume)
+
+        # Check if pygame.mixer is initialized
+        if not pygame.mixer.get_init():
+            self.initialize_mixer()
+
+        pygame.mixer.music.set_volume(volume)
+
 
 if __name__ == "__main__":
     root = Tk()

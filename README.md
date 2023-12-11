@@ -4,10 +4,12 @@ RH Music Player is a simple and delicate music player application built using Py
 
 ## Features
 
+- Lightweight and Super Fast
 - Play, pause, and stop music
 - Navigate to the next and previous songs
-- Display the list of available songs in a Tkinter Listbox
-- Retrieve and display song names using Mutagen for MP3 files
+- Display the list of available songs in Listbox
+- Retrieve and display song names
+
 
 ## Prerequisites
 
